@@ -16,9 +16,9 @@ module.exports = {
   role: 0,
   cooldown: 5,
   group: "group",
-  async run({ message, api, args }) {
+  async run({ args, event, api, Users }) {
     try {
-      const threadId = message.threadId;
+      const threadId = event.threadId;
       const threadIdStr = String(threadId);
       let threadName = "Không rõ";
 
@@ -117,7 +117,7 @@ module.exports = {
       );
     } catch (err) {
       console.error("[CHECKTT] Lỗi:", err);
-      return api.sendMessage("Đã xảy ra lỗi khi xử lý lệnh checktt.", message.threadId, message.type);
+      return api.sendMessage("Đã xảy ra lỗi khi xử lý lệnh checktt.", event.threadId, event.type);
     }
   }
 };

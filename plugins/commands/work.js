@@ -105,9 +105,9 @@ module.exports = {
     noPrefix: false,
 
     async run({ message, api }) {
-        const threadId = message.threadId;
-        const threadType = message.type;
-        const uid = message.data?.uidFrom;
+        const threadId = event.threadId;
+        const threadType = event.type;
+        const uid = event.data?.uidFrom;
 
         const [userExists] = await query("SELECT uid FROM users WHERE uid = ?", [uid]);
         if (!userExists) {
@@ -130,11 +130,11 @@ module.exports = {
             command: "work",
             onReply: async ({ message, api, content }) => {
                 const replyNumber = parseInt(content.trim());
-                const senderUid = message.data?.uidFrom;
-                const replyThreadId = message.threadId;
+                const senderUid = event.data?.uidFrom;
+                const replyThreadId = event.threadId;
 
                 if (isNaN(replyNumber) || replyNumber < 1 || replyNumber > works.length) {
-                    await api.sendMessage({ msg: " Số thứ tự không hợp lệ! Vui lòng chọn từ 1-4.", ttl: 2*60*60_000 }, replyThreadId, message.type);
+                    await api.sendMessage({ msg: " Số thứ tự không hợp lệ! Vui lòng chọn từ 1-4.", ttl: 2*60*60_000 }, replyThreadId, event.type);
                     return { clear: false };
                 }
 
@@ -144,13 +144,13 @@ module.exports = {
                 const cooldownTime = 2 * 60 * 60 * 1000;
 
                 if (!user) {
-                    await api.sendMessage({ msg: "Bạn chưa có tài khoản trong hệ thống. Vui lòng tương tác với bot trước.", ttl: 2*60*60_000 }, replyThreadId, message.type);
+                    await api.sendMessage({ msg: "Bạn chưa có tài khoản trong hệ thống. Vui lòng tương tác với bot trước.", ttl: 2*60*60_000 }, replyThreadId, event.type);
                     return { clear: false };
                 }
 
                 if (user.work_cooldown && now < user.work_cooldown) {
                     const remaining = user.work_cooldown - now;
-                    await api.sendMessage({ msg: ` Bạn cần chờ ${formatTime(remaining)} để làm việc tiếp theo!`, ttl: 2*60*60_000 }, replyThreadId, message.type);
+                    await api.sendMessage({ msg: ` Bạn cần chờ ${formatTime(remaining)} để làm việc tiếp theo!`, ttl: 2*60*60_000 }, replyThreadId, event.type);
                     return { clear: false };
                 }
 
@@ -159,7 +159,7 @@ module.exports = {
                     [now + cooldownTime, senderUid]
                 );
 
-                const workingMsg = await api.sendMessage({ msg: ` Đang ${work.name}...`, ttl: 2*60*60_000 }, replyThreadId, message.type);
+                const workingMsg = await api.sendMessage({ msg: ` Đang ${work.name}...`, ttl: 2*60*60_000 }, replyThreadId, event.type);
 
                 await new Promise(resolve => setTimeout(resolve, 3500));
 
@@ -168,9 +168,9 @@ module.exports = {
                         await api.undo({ 
                             msgId: workingMsg.messageID, 
                             cliMsgId: workingMsg.cliMsgId || 0 
-                        }, replyThreadId, message.type);
+                        }, replyThreadId, event.type);
                     } catch {}
-                    await api.sendMessage({ msg: `⚠️ Ôi Không Bạn Gặp Tai Nạn Trong Lúc Làm Việc.`, ttl: 2*60*60_000 }, replyThreadId, message.type);
+                    await api.sendMessage({ msg: `⚠️ Ôi Không Bạn Gặp Tai Nạn Trong Lúc Làm Việc.`, ttl: 2*60*60_000 }, replyThreadId, event.type);
                     return { clear: true };
                 }
 

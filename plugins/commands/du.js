@@ -54,9 +54,9 @@ module.exports = {
     "dú đâu rồi"
   ],
   noPrefix: true,
-  async run({ message, api }) {
-    const threadId = message.threadId;
-    const threadType = message.type;
+  async run({ event, api }) {
+    const threadId = event.threadId;
+    const threadType = event.type;
     try {
       const raw = await fsp.readFile(DATA_FILE, "utf-8");
       const urls = JSON.parse(raw);

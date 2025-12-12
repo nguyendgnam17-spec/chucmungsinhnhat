@@ -8,11 +8,11 @@ prefix: "/"
 name_bot: "Zalo Bot"
 
 admin_bot:
-  - "1"
-  - "2"
+  - "2552680180144164992"
+  - ""
 support_bot:
-  - "1"
-  - "2"
+  - "2552680180144164992"
+  - ""
 
 allow_private_command: true
 default_money: 0

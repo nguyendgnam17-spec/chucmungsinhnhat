@@ -42,8 +42,8 @@ module.exports = {
   aliases: ["umaru"],
   noPrefix: false,
   async run({ message, api }) {
-    const threadId = message.threadId;
-    const threadType = message.type ?? ThreadType.User;
+    const threadId = event.threadId;
+    const threadType = event.type ?? ThreadType.User;
     try {
       const raw = await fsp.readFile(DATA_FILE, "utf-8");
       const urls = JSON.parse(raw);

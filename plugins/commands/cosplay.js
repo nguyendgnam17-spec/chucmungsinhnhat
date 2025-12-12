@@ -18,8 +18,8 @@ module.exports = {
   noPrefix: true,
 
   async run({ message, api }) {
-    const threadId = message.threadId;
-    const threadType = message.type;
+    const threadId = event.threadId;
+    const threadType = event.type;
 
     try {
       const filePath = path.resolve("Api", "Data","Video", "VideoCosplay.json");
