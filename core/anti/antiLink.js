@@ -36,11 +36,15 @@ function startAntiLink(api) {
         const type = msg.type;
         const data = msg.data;
         const msgBody = (() => {
-          const content = msg.data?.content;
-          if (Array.isArray(content)) return content.join(' ');
-          if (typeof content === 'string') return content;
-          if (content && typeof content === 'object') return JSON.stringify(content);
-          return '';
+          try {
+            const content = msg.data?.content;
+            if (Array.isArray(content)) return content.map(c => typeof c === 'string' ? c : JSON.stringify(c)).join(' ');
+            if (typeof content === 'string') return content;
+            if (content && typeof content === 'object') return JSON.stringify(content);
+            return '';
+          } catch {
+            return '';
+          }
         })();
 
         if (!userId || !data || type !== 1) return;
