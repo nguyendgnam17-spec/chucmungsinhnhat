@@ -35,7 +35,13 @@ function startAntiLink(api) {
         const name = msg.senderName || "Nguoi dung";
         const type = msg.type;
         const data = msg.data;
-        const msgBody = Array.isArray(msg.data?.content) ? msg.data.content.join(' ') : String(msg.data?.content || '');
+        const msgBody = (() => {
+          const content = msg.data?.content;
+          if (Array.isArray(content)) return content.join(' ');
+          if (typeof content === 'string') return content;
+          if (content && typeof content === 'object') return JSON.stringify(content);
+          return '';
+        })();
 
         if (!userId || !data || type !== 1) return;
 
