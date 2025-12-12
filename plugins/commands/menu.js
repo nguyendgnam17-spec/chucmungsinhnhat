@@ -11,12 +11,25 @@ module.exports.config = {
 };
 
 module.exports.run = async ({ args, event, api }) => {
-    const { threadId, type } = event;
+    const { threadId, type, data } = event;
     const commands = global.client.commands;
+    const senderId = data?.uidFrom;
 
-    let msg = "=== DANH SACH LENH ===\n\n";
+    let msg = `=== DANH SACH LENH ===\nID Bot: ${global.api?.zaloId || 'N/A'}\nID User: ${senderId || 'N/A'}\n\n`;
 
     const categories = {};
+    const icons = {
+        "game": "🎮",
+        "Kiếm tiền": "💰",
+        "Tiện ích": "🛠️",
+        "Hành động": "👋",
+        "Giải trí": "🎉",
+        "image": "🖼️",
+        "video": "🎥",
+        "other": "📋",
+        "Khac": "❓"
+    };
+
     for (const [name, cmd] of commands) {
         const cat = cmd.config.category || "Khac";
         if (!categories[cat]) categories[cat] = [];
@@ -27,7 +40,8 @@ module.exports.run = async ({ args, event, api }) => {
     }
 
     for (const [cat, cmds] of Object.entries(categories)) {
-        msg += `[${cat}]\n`;
+        const icon = icons[cat.toLowerCase()] || "📋";
+        msg += `${icon} [${cat}]\n`;
         cmds.forEach(c => {
             msg += `  ${global.config.prefix}${c.name} - ${c.description}\n`;
         });
