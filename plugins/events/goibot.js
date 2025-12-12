@@ -9,7 +9,9 @@ module.exports.config = {
 };
 
 module.exports.run = async ({ event, api }) => {
-  const { threadId, body } = event;
+  const { threadId, data } = event;
+  const body = data?.content?.title ?? data?.content;
+  if (!body || typeof body !== 'string') return;
   const lowerBody = body.toLowerCase();
   if (!lowerBody.includes("bot")) return;
 
