@@ -95,5 +95,30 @@ global.botStartTime = Date.now();
 
     logger.log("Da dang nhap thanh cong", "info");
 
+    // Auto top interaction daily
+    schedule.scheduleJob("0 0 * * *", async () => {
+        const Threads = require("./core/controller/controllerThreads");
+        const Users = require("./core/controller/controllerUsers");
+        const allThreads = await Threads.getAll();
+        for (const thread of allThreads) {
+            const threadId = thread.threadId;
+            const allUsers = await Users.getAll();
+            const topUsers = allUsers
+                .filter(u => u.data?.tuongtac?.[threadId])
+                .sort((a, b) => (b.data.tuongtac[threadId] || 0) - (a.data.tuongtac[threadId] || 0))
+                .slice(0, 10);
+            if (topUsers.length > 0) {
+                const msg = "Top tương tác ngày:\n" + topUsers.map((u, i) => `${i+1}. ${u.data.name || u.userId}: ${u.data.tuongtac[threadId]}`).join("\n");
+                api.sendMessage(msg, threadId);
+                // Reset counts
+                for (const u of topUsers) {
+                    let userData = u.data;
+                    if (userData.tuongtac) delete userData.tuongtac[threadId];
+                    await Users.setData(u.userId, userData);
+                }
+            }
+        }
+    });
+
     listener(api);
 })();
