@@ -15,7 +15,7 @@ module.exports.run = async ({ args, event, api }) => {
     const commands = global.client.commands;
     const senderId = data?.uidFrom;
 
-    let msg = `=== DANH SACH LENH ===\nID Bot: ${global.api?.zaloId || 'N/A'}\nID User: ${senderId || 'N/A'}\n\n`;
+    let msg = `=== DANH SACH LENH ===\nID Bot: ${global.config?.name_bot || 'N/A'}\nID User: ${senderId || 'N/A'}\n\n`;
 
     const categories = {};
     const icons = {
