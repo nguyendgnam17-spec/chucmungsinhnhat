@@ -28,9 +28,9 @@ module.exports = {
         threadName = info?.name || "Không rõ";
       } catch {}
 
-      const mentions = Array.isArray(message.data?.mentions) ? message.data.mentions : [];
-      const senderId = message.data?.uidFrom;
-      const senderName = message.data?.dName || "Không rõ";
+      const mentions = Array.isArray(event.data?.mentions) ? event.data.mentions : [];
+      const senderId = event.data?.uidFrom;
+      const senderName = event.data?.dName || "Không rõ";
       const subCommand = (args[0] || "").toLowerCase();
 
       if (!subCommand || mentions.length > 0) {
@@ -39,7 +39,7 @@ module.exports = {
 
         const [row] = await query(`SELECT name, uid, tuongtac, tuongtactuan, tuongtacthang FROM users WHERE uid = ? LIMIT 1`, [targetId]);
         if (!row) {
-          return api.sendMessage(`Không có dữ liệu tương tác cho "${targetName}"`, threadId, message.type);
+          return api.sendMessage(`Không có dữ liệu tương tác cho "${targetName}"`, threadId, event.type);
         }
 
         const data = safeParseJsonArray(row.tuongtac);
@@ -79,7 +79,7 @@ module.exports = {
           "╰────────────────────────────────⭓"
         ];
 
-        return api.sendMessage({ msg: lines.join("\n"), quoteId: message.msgId }, threadId, message.type);
+        return api.sendMessage({ msg: lines.join("\n"), quoteId: event.msgId }, threadId, event.type);
       }
 
       if (subCommand === "box") {
@@ -91,9 +91,9 @@ module.exports = {
           if (m && m.tuongtac > 0) list.push({ name: row.name || "Không rõ", count: m.tuongtac });
         }
         const top = list.sort((a, b) => b.count - a.count).slice(0, 10);
-        if (top.length === 0) return api.sendMessage("Không có dữ liệu tương tác trong nhóm này.", threadId, message.type);
+        if (top.length === 0) return api.sendMessage("Không có dữ liệu tương tác trong nhóm này.", threadId, event.type);
         const lines = ["╭─────「 TOP 10 TƯƠNG TÁC NHÓM 」─────⭓", ...top.map((u, i) => `│ ${i + 1}. ${u.name} – ${u.count} Tin Nhắn`), "╰────────────────────────────────⭓"];
-        return api.sendMessage({ msg: lines.join("\n"), quoteId: message.msgId }, threadId, message.type);
+        return api.sendMessage({ msg: lines.join("\n"), quoteId: event.msgId }, threadId, event.type);
       }
 
       if (subCommand === "server") {
@@ -105,15 +105,15 @@ module.exports = {
           if (total > 0) list.push({ name: row.name || "Không rõ", count: total });
         }
         const top = list.sort((a, b) => b.count - a.count).slice(0, 10);
-        if (top.length === 0) return api.sendMessage("Không có dữ liệu tương tác hệ thống.", threadId, message.type);
+        if (top.length === 0) return api.sendMessage("Không có dữ liệu tương tác hệ thống.", threadId, event.type);
         const lines = ["╭─────「 TOP 10 TOÀN HỆ THỐNG 」─────⭓", ...top.map((u, i) => `│ ${i + 1}. ${u.name} – ${u.count} Tin Nhắn`), "╰────────────────────────────────⭓"];
-        return api.sendMessage({ msg: lines.join("\n"), quoteId: message.msgId }, threadId, message.type);
+        return api.sendMessage({ msg: lines.join("\n"), quoteId: event.msgId }, threadId, event.type);
       }
 
       return api.sendMessage(
         "Cú pháp: checktt | checktt @tag | checktt box | checktt server",
         threadId,
-        message.type
+        event.type
       );
     } catch (err) {
       console.error("[CHECKTT] Lỗi:", err);
