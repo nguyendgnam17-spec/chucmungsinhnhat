@@ -64,8 +64,6 @@ global.botStartTime = Date.now();
     const isTermux = !!process.env.TERMUX_VERSION || (process.env.PREFIX && process.env.PREFIX.includes('/data/data/com.termux'));
     if (isTermux) {
         logger.log('Detected: Termux environment. Use `npm run start:termux` if needed.', 'info');
-    } else {
-        logger.log('Detected: Non-Termux environment (VPS/Server or Desktop).', 'info');
     }
     for (let i = 0; i <= global.users.admin.length - 1; i++) {
         const dem = i + 1;

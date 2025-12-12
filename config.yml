@@ -5,7 +5,7 @@ qrcode_path: "qr.png"
 save_cookie: true
 
 prefix: "/"
-name_bot: "Zalo Bot"
+name_bot: "Wolfsamson"
 
 admin_bot:
   - "2552680180144164992"

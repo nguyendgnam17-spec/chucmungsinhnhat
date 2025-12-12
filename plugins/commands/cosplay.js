@@ -1,7 +1,7 @@
 // author @GwenDev
 const fs = require('fs/promises');
 const path = require('path');
-const { Logger, log } = require('../../Utils/Logger.js');
+const { Logger, log } = require('../../utils/logger.js');
 module.exports = {
   name: "cosplay",
   description: "Gửi một video cosplay",
