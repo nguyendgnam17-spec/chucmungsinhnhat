@@ -109,7 +109,8 @@ global.botStartTime = Date.now();
                 .slice(0, 10);
             if (topUsers.length > 0) {
                 const msg = "Top tương tác ngày:\n" + topUsers.map((u, i) => `${i+1}. ${u.data.name || u.userId}: ${u.data.tuongtac[threadId]}`).join("\n");
-                api.sendMessage(msg, threadId);
+                const safeMsg = msg.length > 2000 ? msg.substring(0, 2000) + '...' : msg;
+                api.sendMessage(safeMsg, threadId);
                 // Reset counts
                 for (const u of topUsers) {
                     let userData = u.data;

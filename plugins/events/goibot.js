@@ -21,7 +21,8 @@ module.exports.run = async ({ event, api }) => {
     try {
       const response = await axios.get('https://api.zeidteam.xyz/ai/chatgpt4?prompt=' + encodeURIComponent(afterBot));
       const text = response.data.response;
-      return api.sendMessage(text, threadId);
+      const safeText = text.length > 2000 ? text.substring(0, 2000) + '...' : text;
+      return api.sendMessage(safeText, threadId);
     } catch (error) {
       return api.sendMessage("Bot không hiểu!", threadId);
     }

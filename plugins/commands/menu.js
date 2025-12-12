@@ -50,5 +50,6 @@ module.exports.run = async ({ args, event, api }) => {
 
     msg += `Tong cong: ${commands.size} lenh`;
 
-    return api.sendMessage({ msg }, threadId, type);
+    const safeMsg = msg.length > 2000 ? msg.substring(0, 2000) + '...' : msg;
+    return api.sendMessage({ msg: safeMsg }, threadId, type);
 };
